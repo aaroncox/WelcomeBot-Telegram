@@ -126,18 +126,18 @@ class bot_class:
 					msg.chat.leave()
 					self.groups.delete_group(msg.chat.id)
 					return
-				pervious_msg = self.conn.query_last_message_id(msg.chat.id)
+				previous_msg = self.conn.query_last_message_id(msg.chat.id)
 				self.conn.insert_last_message_id(msg.chat.id, last_msg)
 				if self.groups[msg.chat.id].no_welcome:
-					if pervious_msg is not None:
-						client.delete_messages(msg.chat.id, pervious_msg)
+					if previous_msg is not None:
+						client.delete_messages(msg.chat.id, previous_msg)
 
 	def left_chat_member(self, _client: Client, msg: Message):
 		if self.bot_id in msg.left_chat_member:
 			self.groups.delete_group(msg.chat.id)
 
 	def privileges_control(self, client: Client, msg: Message):
-		bot_name = re.match(r'^\/(setwelcome|clear|status)(@[a-zA-Z_]*bot)?\s?', msg.text).group(2)
+		bot_name = re.match(r'^\/(setwelcome|clear|status|setflag)(@[a-zA-Z_]*bot)?\s?', msg.text).group(2)
 		if bot_name is not None and bot_name[1:] != self.bot_name:
 			return
 		group_info = self.groups[msg.chat.id]
